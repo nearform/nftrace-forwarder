@@ -1,0 +1,13 @@
+{
+  "name": "nftrace-forwarder",
+  "version": "1.0.0",
+  "description": "run nftrace-forwarder with a single arg to forward lttng view to a port",
+  "main": "./lib/forwarder.js",
+  "bin": "./bin/nftrace-forwarder",
+  "author": "Glen Keane",
+  "license": "MIT",
+  "dependencies": {
+    "nftrace-controller": "*",
+    "yargs": "*"
+  }
+}

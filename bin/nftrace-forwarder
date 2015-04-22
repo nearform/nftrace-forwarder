@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+var argv = require('yargs')
+			.usage('Usage: $0 [options]')
+			.options({
+				'a': {
+    				alias: 'address',
+    				demand: false,
+    				default: 'localhost',
+    				describe: 'the ip address of the host to forward lttng-view to'
+    			},
+				'p': {
+        			alias : 'port',
+        			demand: false,
+        			default: 3569,
+        			describe: 'the port on the host machine to forward lttng-view to'
+    			}	
+    		})
+    		.help('h')
+    		.alias('h', 'help')
+    		.epilog('Made by nearform 2015. MIT License.')
+    		.argv;
+
+
+var address = argv.address,
+	port = Number(argv.port);
+
+require('../lib/forwarder')(address, port);
