@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 
+
+var controller = require('nftrace-controller'),
+	though = require('through');
+
 var argv = require('yargs')
 			.usage('Usage: $0 [options]')
 			.options({
 				'a': {
     				alias: 'address',
     				demand: false,
-    				default: 'localhost',
+    				default: process.env.NFTRACE_FORWARDER_ADDRESS || 'localhost',
     				describe: 'the ip address of the host to forward lttng-view to'
     			},
 				'p': {
         			alias : 'port',
         			demand: false,
-        			default: 3569,
+        			default: process.env.NFTRACE_FORWARDER_PORT || 3569,
         			describe: 'the port on the host machine to forward lttng-view to'
     			}	
     		})
@@ -21,8 +25,15 @@ var argv = require('yargs')
     		.epilog('Made by nearform 2015. MIT License.')
     		.argv;
 
-
 var address = argv.address,
 	port = Number(argv.port);
 
-require('../lib/forwarder')(address, port);
+var stream = through(function write(data) {
+    					this.emit('data', data)
+  					},
+  					function end () { //optional 
+    					this.emit('end')
+  					});
+controller.getEventStream(stream);
+
+require('../lib/forwarder')(port, address, stream);
